@@ -6,6 +6,10 @@ from state import IdleState, RunState, SleepState
 
 ARROW_KEYS = (SDLK_LEFT, SDLK_RIGHT)
 
+# 방향키를 눌러 달리기를 시작할 수 있는 상태들.
+# SLEEP 이 빠져 있으면 취침 후 SPACE 를 누르기 전까지 영영 깨어나지 못한다.
+RUNNABLE_FROM = ['IDLE', 'SLEEP']
+
 
 class Boy:
     """소년 캐릭터. 상태 머신을 조립하고, 동작은 각 상태 객체에 위임한다."""
@@ -26,7 +30,7 @@ class Boy:
         self.machine.add_transition('go_to_sleep', 'IDLE', 'SLEEP')
         # IDLE 진입 시 Entry action 이 5초 타이머를 다시 시작한다.
         self.machine.add_transition('go_to_idle', ['SLEEP', 'RUN'], 'IDLE')
-        self.machine.add_transition('go_to_run', 'IDLE', 'RUN')
+        self.machine.add_transition('go_to_run', RUNNABLE_FROM, 'RUN')
 
     @property
     def current_state(self):
@@ -42,7 +46,7 @@ class Boy:
     def _on_key_down(self, key):
         if key == SDLK_SPACE and self.state == 'SLEEP':
             self.go_to_idle()
-        elif key in ARROW_KEYS and self.state == 'IDLE':
+        elif key in ARROW_KEYS and self.state in RUNNABLE_FROM:
             self.face_dir = 1 if key == SDLK_RIGHT else -1
             self.go_to_run()
 
