@@ -1,5 +1,6 @@
 from pico2d import *
 
+from boy import Boy
 from grass import Grass
 
 CANVAS_WIDTH = 800
@@ -23,6 +24,7 @@ def reset_world():
 
     world = []
     world.append(Grass())
+    world.append(Boy())
 
 
 def update_world():
