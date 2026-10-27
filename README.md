@@ -20,12 +20,6 @@ python main.py
 python test_state_machine.py
 ```
 
-상태 다이어그램 이미지를 다시 생성하려면:
-
-```bash
-python make_diagram.py
-```
-
 ---
 
 ## 조작법
@@ -92,6 +86,5 @@ transitions.State
 | `state.py` | 상태 클래스 (`BoyState` 및 4개 구체 상태) |
 | `grass.py` | 배경 잔디 오브젝트 |
 | `test_state_machine.py` | 상태 전이 검증 스크립트 |
-| `make_diagram.py` | 상태 다이어그램 이미지 생성 스크립트 |
 | `PRD.md` | 개발 기획·요구사항 문서 |
 | `state_diagram.png` | 상태 다이어그램 (제출물) |
