@@ -18,6 +18,8 @@ ROW_IDLE_LEFT = 200
 ROW_RUN_RIGHT = 100
 ROW_RUN_LEFT = 0
 
+CANVAS_WIDTH = 800
+
 # 캐릭터가 달릴 수 있는 좌우 경계
 LEFT_BOUNDARY = 50
 RIGHT_BOUNDARY = 750
@@ -134,6 +136,10 @@ class AutoRunState(BoyState):
     # 확대해도 발이 같은 지면에 닿도록 중심을 올려주는 보정값
     GROUND_OFFSET = (SIZE - FRAME_HEIGHT) // 2
 
+    # 확대된 몸이 화면 밖으로 삐져나가지 않는 반전 지점
+    LEFT_LIMIT = SIZE // 2
+    RIGHT_LIMIT = CANVAS_WIDTH - SIZE // 2
+
     def __init__(self):
         super().__init__(name='AUTO_RUN')
 
@@ -143,6 +149,16 @@ class AutoRunState(BoyState):
     def do(self, boy):
         boy.frame = (boy.frame + 1) % FRAME_COUNT
         boy.x += self.SPEED * boy.face_dir
+        self._turn_at_edge(boy)
+
+    def _turn_at_edge(self, boy):
+        """화면 좌우 끝에 닿으면 진행 방향을 반대로 뒤집는다."""
+        if boy.x <= self.LEFT_LIMIT:
+            boy.x = self.LEFT_LIMIT
+            boy.face_dir = 1
+        elif boy.x >= self.RIGHT_LIMIT:
+            boy.x = self.RIGHT_LIMIT
+            boy.face_dir = -1
 
     def draw(self, boy):
         row = ROW_RUN_RIGHT if boy.face_dir == 1 else ROW_RUN_LEFT
