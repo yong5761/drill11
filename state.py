@@ -73,3 +73,27 @@ class IdleState(BoyState):
         row = ROW_IDLE_RIGHT if boy.face_dir == 1 else ROW_IDLE_LEFT
         boy.image.clip_draw(boy.frame * FRAME_WIDTH, row,
                             FRAME_WIDTH, FRAME_HEIGHT, boy.x, boy.y)
+
+
+class SleepState(BoyState):
+    """취침. 바라보던 방향으로 90도 누운 채 정지한다."""
+
+    # 누웠을 때 몸이 지면에 닿도록 중심을 내리는 보정값
+    LYING_OFFSET = 25
+
+    def __init__(self):
+        super().__init__(name='SLEEP')
+
+    def start(self, boy):
+        boy.frame = 0
+
+    def draw(self, boy):
+        if boy.face_dir == 1:
+            row, angle = ROW_IDLE_RIGHT, -90
+        else:
+            row, angle = ROW_IDLE_LEFT, 90
+        boy.image.clip_composite_draw(
+            0, row, FRAME_WIDTH, FRAME_HEIGHT,
+            angle, '', boy.x, boy.y - self.LYING_OFFSET,
+            FRAME_WIDTH, FRAME_HEIGHT,
+        )
