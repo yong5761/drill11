@@ -11,6 +11,10 @@ ARROW_KEYS = (SDLK_LEFT, SDLK_RIGHT)
 # AUTO_RUN 에서는 방향키 입력이 곧 무적 런 취소를 뜻한다.
 RUNNABLE_FROM = ['IDLE', 'SLEEP', 'AUTO_RUN']
 
+# 'a' 키로 자동 무적 런을 시작할 수 있는 상태들.
+# 취침 중에도 바로 무적 런으로 뛰어나갈 수 있어야 한다.
+AUTO_RUNNABLE_FROM = ['IDLE', 'SLEEP']
+
 
 class Boy:
     """소년 캐릭터. 상태 머신을 조립하고, 동작은 각 상태 객체에 위임한다."""
@@ -33,7 +37,7 @@ class Boy:
         # IDLE 진입 시 Entry action 이 5초 타이머를 다시 시작한다.
         self.machine.add_transition('go_to_idle', ['SLEEP', 'RUN', 'AUTO_RUN'], 'IDLE')
         self.machine.add_transition('go_to_run', RUNNABLE_FROM, 'RUN')
-        self.machine.add_transition('go_to_auto_run', 'IDLE', 'AUTO_RUN')
+        self.machine.add_transition('go_to_auto_run', AUTO_RUNNABLE_FROM, 'AUTO_RUN')
 
     @property
     def current_state(self):
@@ -52,7 +56,7 @@ class Boy:
         elif key in ARROW_KEYS and self.state in RUNNABLE_FROM:
             self.face_dir = 1 if key == SDLK_RIGHT else -1
             self.go_to_run()
-        elif key == SDLK_a and self.state == 'IDLE':
+        elif key == SDLK_a and self.state in AUTO_RUNNABLE_FROM:
             self.go_to_auto_run()
 
     def _on_key_up(self, key):

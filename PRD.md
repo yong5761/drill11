@@ -56,6 +56,7 @@
 | `IDLE` | `a` 키 누름 | `AUTO_RUN` | 무적 런 진입 |
 | `SLEEP` | `SPACE` 누름 | `IDLE` | 타이머 리셋 |
 | `SLEEP` | 방향키 누름 | `RUN` | **버그 수정 항목** |
+| `SLEEP` | `a` 키 누름 | `AUTO_RUN` | 취침 중에도 바로 무적 런 |
 | `RUN` | 방향키 뗌 | `IDLE` | 타이머 리셋 |
 | `AUTO_RUN` | 5초 경과 | `IDLE` | 타이머 만료 |
 | `AUTO_RUN` | 방향키 누름 | `RUN` | 무적 런 취소 |
@@ -156,7 +157,7 @@ transitions.State
 | 키 | 동작 |
 |----|------|
 | `→` / `←` | 해당 방향으로 달리기 (`RUN`) |
-| `a` | 자동 무적 런 진입 (`AUTO_RUN`) |
+| `a` | 자동 무적 런 진입 (`IDLE` / `SLEEP` 에서) |
 | `SPACE` | 취침 상태에서 깨어나기 (`SLEEP → IDLE`) |
 | `ESC` | 게임 종료 |
 
@@ -181,6 +182,7 @@ python main.py
 | 1 | 실행 후 5초 대기 | `SLEEP`으로 전환, 캐릭터가 누움 |
 | 2 | `SLEEP`에서 `SPACE` | `IDLE` 복귀, 타이머 리셋 |
 | 3 | `SLEEP`에서 방향키 | `RUN`으로 전환 (버그 수정 확인) |
+| 3-B | `SLEEP`에서 `a` | `AUTO_RUN`으로 바로 전환 |
 | 4 | `IDLE`에서 `a` | `AUTO_RUN` 진입, 크기 확대 + 고속 이동 |
 | 5 | `AUTO_RUN` 중 화면 끝 도달 | 방향 반전 후 반대쪽으로 이동 |
 | 6 | `AUTO_RUN` 진입 후 5초 대기 | `IDLE` 복귀, 크기 원복 |

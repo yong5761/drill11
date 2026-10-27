@@ -110,6 +110,16 @@ def scenario_3_sleep_to_run_with_arrow():
     check('바라보는 방향', boy.face_dir, -1)
 
 
+def scenario_3b_sleep_to_auto_run():
+    print("시나리오 3-B — SLEEP 에서 'a' 키로 바로 무적 런")
+    boy = new_boy()
+    advance(6)
+    boy.update()
+    check('취침 확인', boy.state, 'SLEEP')
+    press(boy, SDLK_a)
+    check("'a' 입력 후", boy.state, 'AUTO_RUN')
+
+
 def scenario_4_idle_to_auto_run():
     print("시나리오 4 — IDLE 에서 'a' 키로 AUTO_RUN 진입")
     boy = new_boy()
@@ -167,6 +177,7 @@ def main():
         scenario_1_idle_to_sleep,
         scenario_2_sleep_to_idle_with_space,
         scenario_3_sleep_to_run_with_arrow,
+        scenario_3b_sleep_to_auto_run,
         scenario_4_idle_to_auto_run,
         scenario_5_auto_run_bounces,
         scenario_6_auto_run_timeout,
