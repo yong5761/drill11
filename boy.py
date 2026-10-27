@@ -8,7 +8,8 @@ ARROW_KEYS = (SDLK_LEFT, SDLK_RIGHT)
 
 # 방향키를 눌러 달리기를 시작할 수 있는 상태들.
 # SLEEP 이 빠져 있으면 취침 후 SPACE 를 누르기 전까지 영영 깨어나지 못한다.
-RUNNABLE_FROM = ['IDLE', 'SLEEP']
+# AUTO_RUN 에서는 방향키 입력이 곧 무적 런 취소를 뜻한다.
+RUNNABLE_FROM = ['IDLE', 'SLEEP', 'AUTO_RUN']
 
 
 class Boy:
