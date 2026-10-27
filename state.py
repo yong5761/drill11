@@ -128,7 +128,11 @@ class AutoRunState(BoyState):
     키 조작 없이 스스로 좌우로 계속 이동한다.
     """
 
-    SPEED = RunState.SPEED
+    SPEED = RunState.SPEED * 3          # 평소 달리기의 3배 속도
+    SIZE = int(FRAME_WIDTH * 1.6)       # 1.6배로 확대된 캐릭터 크기
+
+    # 확대해도 발이 같은 지면에 닿도록 중심을 올려주는 보정값
+    GROUND_OFFSET = (SIZE - FRAME_HEIGHT) // 2
 
     def __init__(self):
         super().__init__(name='AUTO_RUN')
@@ -142,5 +146,8 @@ class AutoRunState(BoyState):
 
     def draw(self, boy):
         row = ROW_RUN_RIGHT if boy.face_dir == 1 else ROW_RUN_LEFT
-        boy.image.clip_draw(boy.frame * FRAME_WIDTH, row,
-                            FRAME_WIDTH, FRAME_HEIGHT, boy.x, boy.y)
+        boy.image.clip_composite_draw(
+            boy.frame * FRAME_WIDTH, row, FRAME_WIDTH, FRAME_HEIGHT,
+            0, '', boy.x, boy.y + self.GROUND_OFFSET,
+            self.SIZE, self.SIZE,
+        )
