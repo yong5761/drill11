@@ -97,3 +97,26 @@ class SleepState(BoyState):
             angle, '', boy.x, boy.y - self.LYING_OFFSET,
             FRAME_WIDTH, FRAME_HEIGHT,
         )
+
+
+class RunState(BoyState):
+    """방향키를 누르고 있는 동안 해당 방향으로 달린다."""
+
+    SPEED = 5
+
+    def __init__(self):
+        super().__init__(name='RUN')
+
+    def start(self, boy):
+        boy.frame = 0
+
+    def do(self, boy):
+        boy.frame = (boy.frame + 1) % FRAME_COUNT
+        boy.x += self.SPEED * boy.face_dir
+        # 캔버스 좌우 가장자리를 넘어가지 않는다.
+        boy.x = max(LEFT_BOUNDARY, min(RIGHT_BOUNDARY, boy.x))
+
+    def draw(self, boy):
+        row = ROW_RUN_RIGHT if boy.face_dir == 1 else ROW_RUN_LEFT
+        boy.image.clip_draw(boy.frame * FRAME_WIDTH, row,
+                            FRAME_WIDTH, FRAME_HEIGHT, boy.x, boy.y)
