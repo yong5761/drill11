@@ -1,8 +1,8 @@
-from pico2d import (SDLK_LEFT, SDLK_RIGHT, SDLK_SPACE, SDL_KEYDOWN, SDL_KEYUP,
-                    get_time, load_image)
+from pico2d import (SDLK_LEFT, SDLK_RIGHT, SDLK_SPACE, SDLK_a, SDL_KEYDOWN,
+                    SDL_KEYUP, get_time, load_image)
 from transitions import Machine
 
-from state import IdleState, RunState, SleepState
+from state import AutoRunState, IdleState, RunState, SleepState
 
 ARROW_KEYS = (SDLK_LEFT, SDLK_RIGHT)
 
@@ -23,7 +23,7 @@ class Boy:
 
         self.machine = Machine(
             model=self,
-            states=[IdleState(), SleepState(), RunState()],
+            states=[IdleState(), SleepState(), RunState(), AutoRunState()],
             initial='IDLE',
             auto_transitions=False,
         )
@@ -31,6 +31,7 @@ class Boy:
         # IDLE 진입 시 Entry action 이 5초 타이머를 다시 시작한다.
         self.machine.add_transition('go_to_idle', ['SLEEP', 'RUN'], 'IDLE')
         self.machine.add_transition('go_to_run', RUNNABLE_FROM, 'RUN')
+        self.machine.add_transition('go_to_auto_run', 'IDLE', 'AUTO_RUN')
 
     @property
     def current_state(self):
@@ -49,6 +50,8 @@ class Boy:
         elif key in ARROW_KEYS and self.state in RUNNABLE_FROM:
             self.face_dir = 1 if key == SDLK_RIGHT else -1
             self.go_to_run()
+        elif key == SDLK_a and self.state == 'IDLE':
+            self.go_to_auto_run()
 
     def _on_key_up(self, key):
         if key in ARROW_KEYS and self.state == 'RUN':
