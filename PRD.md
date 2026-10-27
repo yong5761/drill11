@@ -63,7 +63,7 @@
 
 ### 3.3 상태 다이어그램
 
-![상태 다이어그램](state_diagram.png)
+![상태 다이어그램](state-diagram.png)
 
 ---
 
@@ -117,7 +117,7 @@ drill11/
 ├── grass.py              # 배경 잔디 오브젝트
 ├── animation_sheet.png   # 소년 스프라이트 시트
 ├── grass.png             # 잔디 이미지
-├── state_diagram.png     # 상태 다이어그램 (제출물)
+├── state-diagram.png     # 상태 다이어그램 (제출물)
 ├── PRD.md                # 본 문서
 └── README.md             # 실행 방법 안내
 ```

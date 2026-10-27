@@ -35,7 +35,7 @@ python test_state_machine.py
 
 ## 상태 다이어그램
 
-![상태 다이어그램](state_diagram.png)
+![상태 다이어그램](state-diagram.png)
 
 ---
 
@@ -87,4 +87,4 @@ transitions.State
 | `grass.py` | 배경 잔디 오브젝트 |
 | `test_state_machine.py` | 상태 전이 검증 스크립트 |
 | `PRD.md` | 개발 기획·요구사항 문서 |
-| `state_diagram.png` | 상태 다이어그램 (제출물) |
+| `state-diagram.png` | 상태 다이어그램 (제출물) |
