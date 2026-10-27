@@ -1,7 +1,10 @@
-from pico2d import SDLK_SPACE, SDL_KEYDOWN, get_time, load_image
+from pico2d import (SDLK_LEFT, SDLK_RIGHT, SDLK_SPACE, SDL_KEYDOWN, SDL_KEYUP,
+                    get_time, load_image)
 from transitions import Machine
 
-from state import IdleState, SleepState
+from state import IdleState, RunState, SleepState
+
+ARROW_KEYS = (SDLK_LEFT, SDLK_RIGHT)
 
 
 class Boy:
@@ -16,13 +19,14 @@ class Boy:
 
         self.machine = Machine(
             model=self,
-            states=[IdleState(), SleepState()],
+            states=[IdleState(), SleepState(), RunState()],
             initial='IDLE',
             auto_transitions=False,
         )
         self.machine.add_transition('go_to_sleep', 'IDLE', 'SLEEP')
         # IDLE 진입 시 Entry action 이 5초 타이머를 다시 시작한다.
-        self.machine.add_transition('go_to_idle', 'SLEEP', 'IDLE')
+        self.machine.add_transition('go_to_idle', ['SLEEP', 'RUN'], 'IDLE')
+        self.machine.add_transition('go_to_run', 'IDLE', 'RUN')
 
     @property
     def current_state(self):
@@ -30,10 +34,20 @@ class Boy:
         return self.machine.get_state(self.state)
 
     def handle_event(self, event):
-        if event.type != SDL_KEYDOWN:
-            return
+        if event.type == SDL_KEYDOWN:
+            self._on_key_down(event.key)
+        elif event.type == SDL_KEYUP:
+            self._on_key_up(event.key)
 
-        if event.key == SDLK_SPACE and self.state == 'SLEEP':
+    def _on_key_down(self, key):
+        if key == SDLK_SPACE and self.state == 'SLEEP':
+            self.go_to_idle()
+        elif key in ARROW_KEYS and self.state == 'IDLE':
+            self.face_dir = 1 if key == SDLK_RIGHT else -1
+            self.go_to_run()
+
+    def _on_key_up(self, key):
+        if key in ARROW_KEYS and self.state == 'RUN':
             self.go_to_idle()
 
     def update(self):
