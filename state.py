@@ -120,3 +120,27 @@ class RunState(BoyState):
         row = ROW_RUN_RIGHT if boy.face_dir == 1 else ROW_RUN_LEFT
         boy.image.clip_draw(boy.frame * FRAME_WIDTH, row,
                             FRAME_WIDTH, FRAME_HEIGHT, boy.x, boy.y)
+
+
+class AutoRunState(BoyState):
+    """자동 무적 런.
+
+    키 조작 없이 스스로 좌우로 계속 이동한다.
+    """
+
+    SPEED = RunState.SPEED
+
+    def __init__(self):
+        super().__init__(name='AUTO_RUN')
+
+    def start(self, boy):
+        boy.frame = 0
+
+    def do(self, boy):
+        boy.frame = (boy.frame + 1) % FRAME_COUNT
+        boy.x += self.SPEED * boy.face_dir
+
+    def draw(self, boy):
+        row = ROW_RUN_RIGHT if boy.face_dir == 1 else ROW_RUN_LEFT
+        boy.image.clip_draw(boy.frame * FRAME_WIDTH, row,
+                            FRAME_WIDTH, FRAME_HEIGHT, boy.x, boy.y)
