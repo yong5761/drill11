@@ -132,6 +132,7 @@ class AutoRunState(BoyState):
 
     SPEED = RunState.SPEED * 3          # 평소 달리기의 3배 속도
     SIZE = int(FRAME_WIDTH * 1.6)       # 1.6배로 확대된 캐릭터 크기
+    DURATION = 5.0                      # 이만큼 지나면 스스로 IDLE 로 돌아간다
 
     # 확대해도 발이 같은 지면에 닿도록 중심을 올려주는 보정값
     GROUND_OFFSET = (SIZE - FRAME_HEIGHT) // 2
@@ -145,11 +146,15 @@ class AutoRunState(BoyState):
 
     def start(self, boy):
         boy.frame = 0
+        boy.auto_run_start = get_time()
 
     def do(self, boy):
         boy.frame = (boy.frame + 1) % FRAME_COUNT
         boy.x += self.SPEED * boy.face_dir
         self._turn_at_edge(boy)
+
+        if get_time() - boy.auto_run_start > self.DURATION:
+            boy.go_to_idle()
 
     def _turn_at_edge(self, boy):
         """화면 좌우 끝에 닿으면 진행 방향을 반대로 뒤집는다."""

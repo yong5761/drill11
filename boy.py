@@ -19,6 +19,7 @@ class Boy:
         self.frame = 0
         self.face_dir = 1  # 1=오른쪽, -1=왼쪽
         self.idle_start = get_time()
+        self.auto_run_start = 0.0
         self.image = load_image('animation_sheet.png')
 
         self.machine = Machine(
@@ -29,7 +30,7 @@ class Boy:
         )
         self.machine.add_transition('go_to_sleep', 'IDLE', 'SLEEP')
         # IDLE 진입 시 Entry action 이 5초 타이머를 다시 시작한다.
-        self.machine.add_transition('go_to_idle', ['SLEEP', 'RUN'], 'IDLE')
+        self.machine.add_transition('go_to_idle', ['SLEEP', 'RUN', 'AUTO_RUN'], 'IDLE')
         self.machine.add_transition('go_to_run', RUNNABLE_FROM, 'RUN')
         self.machine.add_transition('go_to_auto_run', 'IDLE', 'AUTO_RUN')
 
